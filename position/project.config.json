@@ -1,11 +1,23 @@
 {
 	"description": "项目配置文件。",
+	"miniprogramRoot": "dist/",
 	"setting": {
 		"urlCheck": true,
-		"es6": true,
+		"es6": false,
 		"postcss": true,
-		"minified": true,
-		"newFeature": true
+		"minified": false,
+		"newFeature": true,
+		"coverView": true,
+		"autoAudits": false,
+		"checkInvalidKey": true,
+		"checkSiteMap": true,
+		"uploadWithSourceMap": true,
+		"babelSetting": {
+			"ignore": [],
+			"disablePlugins": [],
+			"outputPath": ""
+		},
+		"uglifyFileName": true
 	},
 	"compileType": "miniprogram",
 	"libVersion": "1.9.94",
