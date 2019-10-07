@@ -1,22 +1,25 @@
 //index.js
-//获取应用实例
 const app = getApp()
 
 Page({
   data: {
     longitude: 113.324520,
     latitude: 23.099994,
+
+
     userLicenseAgreementDisplay:false,
     mapDisplay:false,
     repairFeedbackDisplay:false,
     boxDisplay:true,
-    submitFeedback:[],
-    userInfo: {},
+
     hasUserInfo: false,
     disabled: true,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
     cannotEntery: true,
 
+    submitFeedback:[],
+    userInfo: {},
+  
     markers: [
       {
         iconPath: "../img/mapMarker.png",
@@ -43,6 +46,7 @@ Page({
         height: 30
       }
     ],
+    // 路线
     polyline: [{
       points: [{
         latitude: 30.49984,
@@ -58,6 +62,7 @@ Page({
       width: 2,
       dottedLine: true
     }],
+
     controls: [{
       id: 1,
       iconPath: '/resources/location.png',
@@ -69,16 +74,15 @@ Page({
       },
       clickable: true
     }],
-
+    // 故障反馈类型
     items: [
       { name: 'location', value: '校车的定位错误；定位与实际位置偏离', color:'red' },
       { name: 'state', value: '校车颜色标示的状态与校车的实际状态不符', color: 'red'  },
       { name: 'number', value: '校车车号不对应', color: 'red'  },
       { name: 'path', value: '路线错误，上车点错误', color: 'red'  },
     ]
-
-
   },
+
   onReady: function (e) {
     // 使用 wx.createMapContext 获取 map 上下文
     let that = this
@@ -88,15 +92,12 @@ Page({
       success(res) {
         const latitude = res.latitude
         const longitude = res.longitude
-        console.log(latitude)
-        console.log(longitude)
       that.setData({
         latitude: latitude,
         longitude: longitude,
       })
       }
-    })
-   
+    }) 
   },  
 
 
@@ -189,11 +190,13 @@ Page({
       hasUserInfo: true
     })
   },
+  // 查看用户许可协议详细内容（跳转
   toAgreement:function(e){
     wx.navigateTo({
       url:'../agreement/agreement'
     })
   },
+  // 同意用户许可协议后不再显示用户许可协议面板
   agreemented:function(e){
     wx.setStorageSync('agreement', true)
    this.setData({
@@ -201,19 +204,21 @@ Page({
      mapDisplay: true,
    })
   },
-
+// 故障反馈面板是否显示
   repair:function(){
     this.setData({
       boxDisplay: false,
       repairFeedbackDisplay: true,
     })
   },
+  // 获取checkbox的值
   checkboxChange: function (e) {
     console.log('checkbox发生change事件，携带value值为：', e.detail.value)
     this.setData({
       submitFeedback: e.detail.value
     })
   },
+  // 提交反馈
   submitFeedback:function(e){
     console.log(this.data.submitFeedback)
   },
