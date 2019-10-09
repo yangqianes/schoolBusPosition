@@ -37,4 +37,14 @@
   </view>
 </view>
 
-
+<!-- map组件上添加button测试 -->
+<cover-view class='bottom-btn'>
+        <cover-view class='bot-btn service'>
+            <cover-view class='contact-btn' open-type='contact'>
+                咨询客服
+            </cover-view>
+        </cover-view>
+        <cover-view class='bot-btn order' bindtap='toOrder'>
+            立即预定
+        </cover-view>
+    </cover-view>

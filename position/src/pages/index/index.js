@@ -11,13 +11,13 @@ Page({
     userLicenseAgreementDisplay:false,
     boxDisplay:false,
     repairFeedbackDisplay:false,
-    // boxDisplay:true,
 
     hasUserInfo: false,
     disabled: true,
     canIUse: wx.canIUse('button.open-type.getUserInfo'),
     cannotEntery: true,
 
+    timer:"",
     submitFeedback:[],
     userInfo: {},
   
@@ -29,40 +29,8 @@ Page({
         longitude: 114.34253,
         width: 30,
         height: 30
-      },
-      {
-        iconPath: "../img/mapMarker.png",
-        id: 0,
-        latitude: 30.489959,
-        longitude: 114.401657,
-        width: 30,
-        height: 30
-      },
-      {
-        iconPath: "../img/mapMarker.png",
-        id: 0,
-        latitude: 30.49514,
-        longitude: 114.402185,
-        width: 30,
-        height: 30
       }
     ],
-    // 路线
-    polyline: [{
-      points: [{
-        latitude: 30.49984,
-        longitude: 114.34253,
-      }, {
-          latitude: 30.489959,
-          longitude: 114.401657,
-      },{
-          latitude: 30.49514,
-          longitude: 114.402185,
-      }],
-      color: "#FF0000DD",
-      width: 2,
-      dottedLine: true
-    }],
     // 故障反馈类型
     items: [
       { name: 'location', value: '校车的定位错误；定位与实际位置偏离', color:'red' },
@@ -88,22 +56,41 @@ Page({
       }
     }) 
 
-    // wx.createSelectorQuery().select("#map").boundingClientRect(function(rect) {
-    //   let top = rect.top
-    //   that.setData({
-    //     // mapHeight:wx.getSystemInfoSync().windowHeight-top
-    //     mapHeight:
-    //   })
-    //   console.log(that.data.mapHeight)
-    //   console.log(wx.getSystemInfoSync().windowHeight)
-    //   console.log(top)
-    // }).exec()
+    var token = wx.getStorageSync('token')
+    if (token) {
+      let busPositionUrl = app.BASE_URL + '/bus/all'
+      app.request(busPositionUrl, 'GET', '', res => {
+        let getLatitude = res.data.bused[0].position.latitude / 100
+        let getLongitude = res.data.bused[0].position.longitude.toString() / 100
+        let getId = res.data.bused[0].id
+        that.setData({
+          markers: [
+            {
+              iconPath: "../img/greenBus.png",
+              id: 0,
+              latitude: 30.487226,
+              longitude: 114.392588,
+              width: 30,
+              height: 30
+            }
+          ]
+        })
+        console.log(that.data.markers)
+      }, res => { }, { 'Authorization': token }, '')
+      clearInterval(that.data.timer)
+    } else {
+      that.setData({
+        timer: setInterval(function () {
+          that.onReady()
+        }, 10000)
+      })
+    }
   },  
 
 
   bindGetUserInfo: function (e) {
     // 查看是否授权
-    var that = this;
+    let that = this;
 
     wx.getSetting({
       success(res) {
@@ -119,13 +106,11 @@ Page({
                     //发起网络请求
                     let nicN = userInfoStr.nickName,
                       nicA = userInfoStr.avatarUrl,
-                      // authorizeUrl = app.BASE_URL + '/api/weapp/authorizations',
-                      authorizeData = { code: res.code, nickname: nicN, avatar: nicA }
-
-                    // app.request(authorizeUrl, 'POST', authorizeData, res => {
-                    //   wx.setStorageSync('token', res.data.access_token)   
-                    //   var token = wx.getStorageSync('token')
-                    // }, res => { }, { 'content-type': 'application/x-www-form-urlencoded' }, '')
+                      authorizeUrl = app.BASE_URL +'/user/session',
+                      authorizeData = { code: res.code }
+                      app.request(authorizeUrl, 'POST', authorizeData, res => {
+                        wx.setStorageSync('token', res.header.Authorization) 
+                      }, res => { }, { 'content-type': 'application/json' }, '')
                   } else {
                     console.log('登录失败！' + res.errMsg)
                   }
@@ -146,32 +131,7 @@ Page({
   },
 
   onLoad: function () {
-    if (app.globalData.userInfo) {
-      this.setData({
-        userInfo: app.globalData.userInfo,
-        hasUserInfo: true
-      })
-    } else if (this.data.canIUse){
-      // 由于 getUserInfo 是网络请求，可能会在 Page.onLoad 之后才返回
-      // 所以此处加入 callback 以防止这种情况
-      app.userInfoReadyCallback = res => {
-        this.setData({
-          userInfo: res.userInfo,
-          hasUserInfo: true
-        })
-      }
-    } else {
-      // 在没有 open-type=getUserInfo 版本的兼容处理
-      wx.getUserInfo({
-        success: res => {
-          app.globalData.userInfo = res.userInfo
-          this.setData({
-            userInfo: res.userInfo,
-            hasUserInfo: true
-          })
-        }
-      })
-    }
+
   },
   onShow: function (e) {
     const agreement = wx.getStorageSync('agreement')
@@ -203,7 +163,22 @@ Page({
      userLicenseAgreementDisplay: false,
      boxDisplay: true,
    })
+
+    var token = wx.getStorageSync('token')
+    let agreementUrl = app.BASE_URL+'/user/agreement'
+    app.request(agreementUrl, 'GET', '', res => {
+      console.log('agreementUrl')
+     console.log(res)
+    }, res => { }, { 'Authorization': token }, '')
   },
+
+  //map组件上添加button测试
+  toOrder: function (e) {
+    wx.navigateTo({
+      url: '../agreement/agreement'
+    })
+  },
+
 // 故障反馈面板是否显示
   repair:function(){
     this.setData({
@@ -221,6 +196,12 @@ Page({
   // 提交反馈
   submitFeedback:function(e){
     console.log(this.data.submitFeedback)
+    let feedbackUrl = app.BASE_URL + '/user/feedback'
+    app.request(feedbackUrl, 'GET', '', res => {
+      console.log('feedbackUrl')
+     console.log(res)
+    }, res => { }, {'content-type':'application/json'}, '')
+
   },
   repairFeedbackBox:function(){
     this.setData({

@@ -102,3 +102,18 @@ checkbox-group label{
   display: block;
   padding:10px 0;
 }
+.bottom-btn{
+  position: fixed;
+  bottom:0;
+  left: 30%;
+}
+.contact-btn{
+  background:blue;
+  width: 100px;
+  height: 30px;
+}
+.bot-btn{
+  background:yellow;
+  width: 100px;
+  height: 30px;
+}

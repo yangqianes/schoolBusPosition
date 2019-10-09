@@ -1,7 +1,9 @@
 //app.js
 // import moment from 'moment';
 import { camelCase } from 'lodash';
+
 App({
+  BASE_URL: "https://bus.duanlv.ltd",
   onLaunch: function () {
     // 展示本地存储能力
     var logs = wx.getStorageSync('logs') || []
