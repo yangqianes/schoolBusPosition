@@ -33,10 +33,10 @@ Page({
     ],
     // 故障反馈类型
     items: [
-      { name: 'location', value: '校车的定位错误；定位与实际位置偏离', color:'red' },
-      { name: 'state', value: '校车颜色标示的状态与校车的实际状态不符', color: 'red'  },
-      { name: 'number', value: '校车车号不对应', color: 'red'  },
-      { name: 'path', value: '路线错误，上车点错误', color: 'red'  },
+      { name: 'location', value: '校车的定位错误；定位与实际位置偏离'},
+      { name: 'state', value: '校车颜色标示的状态与校车的实际状态不符' },
+      { name: 'number', value: '校车车号不对应' },
+      // { name: 'path', value: '路线错误，上车点错误', color: 'red'  },
     ]
   },
 
@@ -44,6 +44,7 @@ Page({
     // 使用 wx.createMapContext 获取 map 上下文
     let that = this
     this.mapCtx = wx.createMapContext('myMap')
+    //获取当前位置
     wx.getLocation({
       type: 'gcj02', //返回可以用于wx.openLocation的经纬度
       success(res) {
@@ -54,29 +55,47 @@ Page({
         longitude: longitude,
       })
       }
-    }) 
+    })
 
-    var token = wx.getStorageSync('token')
-    if (token) {
-      let busPositionUrl = app.BASE_URL + '/bus/all'
-      app.request(busPositionUrl, 'GET', '', res => {
-        let getLatitude = res.data.bused[0].position.latitude / 100
-        let getLongitude = res.data.bused[0].position.longitude.toString() / 100
-        let getId = res.data.bused[0].id
-        that.setData({
-          markers: [
-            {
-              iconPath: "../img/greenBus.png",
-              id: 0,
-              latitude: 30.487226,
-              longitude: 114.392588,
-              width: 30,
-              height: 30
-            }
-          ]
-        })
-        console.log(that.data.markers)
-      }, res => { }, { 'Authorization': token }, '')
+    let code = wx.getStorageSync('code')
+    console.log(code)
+    if (code) {
+      console.log("codecodecodecode")
+
+      // let authorizeUrl = app.BASE_URL + '/user/session'
+      // let authorizeData = { code: code }
+      // app.request(authorizeUrl, 'POST', authorizeData, res => {
+      //   console.log(res)
+      //   wx.setStorageSync('token', res.header.Authorization)
+
+        var token = wx.getStorageSync('token')
+        console.log(token)
+        let busPositionUrl = app.BASE_URL + '/bus/all'
+        app.request(busPositionUrl, 'GET', '', res => {
+          console.log(res)
+          let getLatitude = res.data.bused[0].position.latitude
+          let getLongitude = res.data.bused[0].position.longitude.toString()
+          let getId = res.data.bused[0].id
+          console.log(getLatitude)
+          console.log(getLongitude)
+          console.log(getId)
+          that.setData({
+            markers: [
+              {
+                iconPath: "../img/greenBus.png",
+                id: getId,
+                // latitude: '30.4871610474',
+                latitude: getLatitude,
+                longitude: getLongitude,
+                // longitude: '114.3926203251',
+                width: 30,
+                height: 30
+              }
+            ]
+          })
+          console.log(that.data.markers)
+        }, res => { }, { 'Authorization': token }, '')
+      // }, res => { }, { 'content-type': 'application/json' }, '')
       clearInterval(that.data.timer)
     } else {
       that.setData({
@@ -104,13 +123,18 @@ Page({
                   console.log(userInfoStr)
                   if (res.code) {
                     //发起网络请求
-                    let nicN = userInfoStr.nickName,
-                      nicA = userInfoStr.avatarUrl,
-                      authorizeUrl = app.BASE_URL +'/user/session',
-                      authorizeData = { code: res.code }
-                      app.request(authorizeUrl, 'POST', authorizeData, res => {
-                        wx.setStorageSync('token', res.header.Authorization) 
-                      }, res => { }, { 'content-type': 'application/json' }, '')
+                    wx.setStorageSync('code', res.code)
+                    that.onReady();
+                    // let code = wx.getStorageSync('code')
+                    // console.log(code)
+                    // let authorizeUrl = app.BASE_URL +'/user/session'
+                    // let  authorizeData = { code:code }
+                    //   app.request(authorizeUrl, 'POST', authorizeData, res => {
+                    //     console.log(res)
+                    //     wx.setStorageSync('token', res.header.Authorization) 
+                    //     var token = wx.getStorageSync('token')
+                    //     console.log(token)
+                    //   }, res => { }, { 'content-type': 'application/json' }, '')
                   } else {
                     console.log('登录失败！' + res.errMsg)
                   }
@@ -141,6 +165,10 @@ Page({
     if (agreement) {
       this.setData({ userLicenseAgreementDisplay: false, boxDisplay: true })
     }
+    //测试需要，后期删除
+    // if (agreement) {
+    //   this.setData({ userLicenseAgreementDisplay: true, boxDisplay: false })
+    // }
   },
   getUserInfo: function(e) {
     console.log(e)
@@ -165,11 +193,12 @@ Page({
    })
 
     var token = wx.getStorageSync('token')
-    let agreementUrl = app.BASE_URL+'/user/agreement'
-    app.request(agreementUrl, 'GET', '', res => {
-      console.log('agreementUrl')
-     console.log(res)
-    }, res => { }, { 'Authorization': token }, '')
+    let agreementUrl = app.BASE_URL +'/user/agreement'
+
+    // app.request(agreementUrl, 'GET', '', res => {
+    //   console.log('agreementUrl')
+    //  console.log(res)
+    // }, res => { }, { 'Authorization': token }, '')
   },
 
   //map组件上添加button测试
@@ -196,11 +225,14 @@ Page({
   // 提交反馈
   submitFeedback:function(e){
     console.log(this.data.submitFeedback)
-    let feedbackUrl = app.BASE_URL + '/user/feedback'
-    app.request(feedbackUrl, 'GET', '', res => {
-      console.log('feedbackUrl')
-     console.log(res)
-    }, res => { }, {'content-type':'application/json'}, '')
+    // var token = wx.getStorageSync('token')
+    // let feedbackUrl = app.BASE_URL + '/feedback'
+    // let data = { text: "定位与实际位置偏离",type: "校车的定位错误；定位与实际位置偏离", }
+    // app.request(feedbackUrl, 'POST', data, res => {
+    //   console.log('feedbackUrl')
+    //  console.log(res)
+    //  console.log(data)
+    // }, res => { }, { 'Authorization': token }, '')
 
   },
   repairFeedbackBox:function(){
