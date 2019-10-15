@@ -5,7 +5,7 @@ const webpack = require('webpack');
 const MinaWebpackPlugin = require('./plugin/MinaWebpackPlugin');
 const MinaRuntimePlugin = require('./plugin/MinaRuntimePlugin');
 const LodashWebpackPlugin = require('lodash-webpack-plugin');
-const debuggable = process.env.BUILD_TYPE !== 'release'
+const debuggable = process.env.BUILD_TYPE !== 'release';
 
 module.exports = {
   context: resolve('src'),

@@ -1,7 +1,9 @@
 {
   "pages": [
+    "pages/come/come",
     "pages/index/index",
     "pages/agreement/agreement"
+    
   ],
   "permission":{
     "scope.userLocation":{
@@ -16,5 +18,4 @@
   },
   "sitemapLocation": "sitemap63.json",
   "debug": true
- 
 }

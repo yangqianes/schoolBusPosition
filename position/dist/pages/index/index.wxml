@@ -1,49 +1,30 @@
-<!-- 微信授权 -->
-<view class='welcome' wx:if="{{cannotEntery}}">
-  <view class='come'>
-      <view class='welcome_title'>校车定位邀你授权</view>
-      <button wx:if="{{canIUse}}"  style="background:rgb(9,187,7);width:80%;border-radius:5rem;margin-top:2rem;" open-type="getUserInfo" bindgetuserinfo="bindGetUserInfo">微信授权</button>
-  </view>
-</view>
 
-
-<!-- 用户许可协议 -->
-<view class="userLicenseAgreementBox" wx:if="{{userLicenseAgreementDisplay}}">
-  <view class="userLicenseAgreement">
-  <view style="border-bottom:1px solid #eee;widt:100%;height:160px;">
-    <view class="userLicenseAgreementTitle">用户许可协议</view>
-    <view class="userLicenseAgreementExplain">请您认真阅读一下用户许可协议，您必须在使用前同意以下条款才能继续使用。</view>
-    <view class="userLicenseAgreementLink" bindtap="toAgreement">点击此阅读《用户许可协议》</view>
-  </view>
-    <view class="userLicenseAgreementBtn" bindtap="agreemented">我已阅读并同意</view>
-  </view>
-</view>
 
 <view class="box" wx:if="{{boxDisplay}}">
-  <view bindtap="repair" class="repair">
-          <image  src="../img/repair.png"></image>
-        </view>
+
 <!-- 地图显示 -->
-  <map id="map" longitude="{{longitude}}" latitude="{{latitude}}" scale="18" controls="{{controls}}" bindcontroltap="controltap" markers="{{markers}}" bindmarkertap="markertap" polyline="{{polyline}}" bindregionchange="regionchange" show-location style="width: 100vw; height: {{mapHeight}};">
-    <!-- map组件上添加button测试 -->
-      <!-- <cover-view class='bottom-btn'>
+  <map id="map" longitude="{{longitude}}" latitude="{{latitude}}" scale="16" controls="{{controls}}" bindcontroltap="controltap" markers="{{markers}}" bindmarkertap="markertap"  bindregionchange="regionchange" show-location style="width: 100vw; height: 100vh;">
+    <!-- map组件上添加button -->
+      <cover-view class='bottom-btn'>
         <cover-view bindtap="repair" class="repair">
           <cover-image  src="../img/repair.png"></cover-image>
         </cover-view>
-    </cover-view> -->
+    </cover-view>
   </map>
 </view>
+
  <!-- 故障反馈 -->
 <view class="repairFeedbackBox"wx:if="{{repairFeedbackDisplay}}" bindtap="repairFeedbackBox">
-  <view class="userLicenseAgreement" catchtap="checkboxChang" style="padding:0 20px;height:440px;">
-    <view class="userLicenseAgreementTitle">故障反馈类型</view>
+<!-- 故障反馈类型 -->
+  <view class="userLicenseAgreement"  catchtap="checkboxChang" style="padding:0 20px;height:460px;width:70%;">
+    <view class="userLicenseAgreementTitle" >故障反馈类型</view>
     <checkbox-group bindchange="checkboxChange" data-check="{{index}}">
-      <label class="checkbox" wx:for="{{items}}" wx:key="{{key}}">
-        <checkbox value="{{item.name}}" checked="{{item.checked}}"/>{{item.value}}
+      <label class="checkbox" wx:for="{{feedbacks}}" wx:key="{{key}}">
+        <checkbox value="{{item.value}}" checked="{{item.checked}}"/>{{item.value}}
       </label>
     </checkbox-group>
-    <textarea style="border:1px solid #eee;width:100%;height:100px;" placeholder="100字以内" placeholder-style="color:#eee;" maxlength="100" adjust-position="true" />
-    <button type="primary" bindtap="submitFeedback" style="margin-top:20px;">提 交</button>
+      <textarea style="height:100px;margin-top:15px;" placeholder="100字以内" placeholder-style="color:#eee;" maxlength="100" adjust-position="true" bindinput="feedbackErea"/>
+    <button type="primary" bindtap="submitFeedback" style="margin-top:25px;">提 交</button>
   </view>
 </view>
 
