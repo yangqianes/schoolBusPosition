@@ -11,10 +11,10 @@ Page({
 
     app.request(agreementUrl, 'GET', '', res => {
       console.log('agreementUrl')
-    console.log(res)
-    wx.redirectTo({
-      url:'../index/index'
-    })
+      console.log(res)
+      wx.redirectTo({
+        url:'../index/index'
+      })
     }, res => { }, { 'Authorization': token }, '')
 
   },

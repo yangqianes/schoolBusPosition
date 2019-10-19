@@ -27,7 +27,7 @@ Page({
     // 故障反馈类型
     feedbacks: [
       { name: 'location', value: '校车的定位错误；定位与实际位置偏离'},
-      { name: 'state', value: '校车颜色标示的状态与校车的实际状态不符' },
+      // { name: 'state', value: '校车颜色标示的状态与校车的实际状态不符' },
       { name: 'number', value: '校车车号不对应' },
     ],
   
@@ -65,25 +65,29 @@ Page({
             wx.setStorageSync('token', res.header.Authorization)
             const busPositionUrl = app.BASE_URL + '/bus/all'
             const token = wx.getStorageSync('token')
-            app.request(busPositionUrl, 'GET', '', res => {
-              console.log(res)
-              const getLatitude = res.data.bused[0].position.latitude
-              const getLongitude = res.data.bused[0].position.longitude.toString()
-              const getId = res.data.bused[0].id
-              that.setData({
-                markers: [
-                  {
-                    iconPath: "../img/greenBus.png",
-                    id: getId,
-                    latitude: getLatitude,
-                    longitude: getLongitude,
-                    width: 30,
-                    height: 30
-                  }
-                ]
-              })
-              console.log(that.data.markers)
-            }, res => { }, { 'Authorization': token }, '')
+            that.setData({
+              timer: setInterval(function () {
+                app.request(busPositionUrl, 'GET', '', res => {
+                  console.log(res)
+                  const getLatitude = res.data.bused[0].position.latitude
+                  const getLongitude = res.data.bused[0].position.longitude.toString()
+                  const getId = res.data.bused[0].id
+                  that.setData({
+                    markers: [
+                      {
+                        iconPath: "../img/greenBus.png",
+                        id: getId,
+                        latitude: getLatitude,
+                        longitude: getLongitude,
+                        width: 30,
+                        height: 30
+                      }
+                    ]
+                  })
+                  console.log(that.data.markers)
+                }, res => { }, { 'Authorization': token }, '')
+              }, 2000)
+            })
           }, res => { }, { 'content-type': 'application/json' }, '')
         }
       }
@@ -140,5 +144,7 @@ Page({
       boxDisplay: true,
     })
   },
-
+  Unload:function(){
+    clearInterval(this.data.timer)
+  }
 })
