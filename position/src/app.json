@@ -1,9 +1,9 @@
 {
   "pages": [
     "pages/come/come",
-    "pages/index/index",
-    "pages/agreement/agreement"
+    "pages/agreement/agreement",
     
+    "pages/index/index"
   ],
   "permission":{
     "scope.userLocation":{

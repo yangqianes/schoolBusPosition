@@ -53,3 +53,18 @@ textarea{
 .itemTip{
   padding-top: 10px;
 }
+.bottom-btn-clear{
+  position: fixed;
+  bottom:5%;
+  left: 5%;
+}
+.clear{
+  display: flex;
+  flex-direction:row-reverse;
+  position: relative;
+  width:100px;
+  height:50px;
+  /* border-radius: 25px; */
+  background-color: #fff;
+  /* box-shadow: 0 0 8px #efefef; */
+}

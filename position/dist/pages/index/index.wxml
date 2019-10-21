@@ -3,11 +3,16 @@
 <view class="box" wx:if="{{boxDisplay}}">
 
 <!-- 地图显示 -->
-  <map id="map" longitude="{{longitude}}" latitude="{{latitude}}" scale="16" controls="{{controls}}" bindcontroltap="controltap" markers="{{markers}}" bindmarkertap="markertap"  bindregionchange="regionchange" show-location style="width: 100vw; height: 100vh;">
+  <map id="map" longitude="{{longitude}}" latitude="{{latitude}}" scale="16" polyline="{{polyline}}" controls="{{controls}}" bindcontroltap="controltap" markers="{{markers}}" bindmarkertap="markertap"  bindregionchange="regionchange" show-location style="width: 100vw; height: 100vh;">
     <!-- map组件上添加button -->
       <cover-view class='bottom-btn'>
         <cover-view bindtap="repair" class="repair">
           <cover-image  src="../img/repair.png"></cover-image>
+        </cover-view>
+    </cover-view>
+     <cover-view class='bottom-btn-clear'>
+        <cover-view bindtap="clear" class="clear">
+          清除缓存
         </cover-view>
     </cover-view>
   </map>

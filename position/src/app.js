@@ -8,8 +8,10 @@ App({
     const that = this;
    
     const agreement = wx.getStorageSync('agreement')
+    console.log("agreement")
     console.log(agreement)
-    if (agreement) {
+  
+    if (agreement){
       wx.reLaunch({
         url: 'pages/index/index'
       })

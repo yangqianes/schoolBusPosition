@@ -24,6 +24,62 @@ Page({
         height: 30
       }
     ],
+    //路线
+    polyline: [{
+      points: [{
+        longitude: 114.3953508139 ,
+        latitude: 30.4935356094 
+      }, {
+          longitude: 114.3964666128,
+          latitude: 30.4932952419 
+        }, {
+          longitude: 114.3960320950 ,
+          latitude: 30.4916218979 
+        }, {
+          longitude: 114.3934786320,
+          latitude: 30.4919316074
+        },
+        {
+          longitude: 114.3934732676,
+          latitude: 30.4914462413,
+        },
+        {
+          longitude: 114.3920302391,
+          latitude: 30.4914323737, 
+        },
+        {
+          longitude: 114.3920999765,
+          latitude: 30.4900779583, 
+        },
+        {
+          longitude: 114.3915581703,
+          latitude: 30.4886033344, 
+        },
+        {
+          longitude: 114.3913757801,
+          latitude: 30.4864306503, 
+        },
+        {
+          longitude: 114.3916976452,
+          latitude: 30.4846970910, 
+        },
+        {
+          longitude: 114.3925344944,
+          latitude: 30.4841238539, 
+        },
+        {
+          longitude: 114.3918746710,
+          latitude: 30.4823717616,
+        },
+        {
+          longitude: 114.3909251690,
+          latitude: 30.4823948765, 
+        }],
+      color: "#FF0000DD",
+      width: 2,
+      dottedLine: true
+    }],
+
     // 故障反馈类型
     feedbacks: [
       { name: 'location', value: '校车的定位错误；定位与实际位置偏离'},
@@ -86,12 +142,13 @@ Page({
                   })
                   console.log(that.data.markers)
                 }, res => { }, { 'Authorization': token }, '')
-              }, 2000)
+              }, 20000)
             })
           }, res => { }, { 'content-type': 'application/json' }, '')
         }
       }
-    })  
+    }) 
+
   },  
   onShow: function (e) {
     console.log("onShow")
@@ -137,6 +194,7 @@ Page({
           boxDisplay: true,
         })
     }, res => { }, { 'Authorization': token }, '')
+
   },
   repairFeedbackBox:function(){
     this.setData({
@@ -146,5 +204,9 @@ Page({
   },
   Unload:function(){
     clearInterval(this.data.timer)
+  },
+  clear:function(){
+    wx.clearStorageSync()
+    console.log("清除数据操作")
   }
 })

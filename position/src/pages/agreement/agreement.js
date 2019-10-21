@@ -1,3 +1,4 @@
+const app = getApp()
 Page({
   data:{
 
@@ -8,7 +9,10 @@ Page({
 
     const token = wx.getStorageSync('token')
     const agreementUrl = app.BASE_URL +'/user/agreement'
-
+    // wx.redirectTo({
+    //   url: '../index/index'
+    // })
+    
     app.request(agreementUrl, 'GET', '', res => {
       console.log('agreementUrl')
       console.log(res)

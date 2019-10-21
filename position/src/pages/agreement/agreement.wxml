@@ -11,5 +11,5 @@
 
         <text>若您对本用户许可协议任何条款有异议，请停止使用校车定位的所有服务。</text>
     </view>
-    <button type="primary" style="margin:20px 0 40px 0;width:80%;left:10%;font-size:14px;" bindtap="agreemented">我已阅读并同意</button>
+    <button type="primary" style="margin:20px 0 40px 0;width:80%;left:10%;font-size:16px;" bindtap="agreemented">我已阅读并同意</button>
 </view>

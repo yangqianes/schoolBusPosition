@@ -12,14 +12,11 @@ Page({
   bindGetUserInfo: function (e) {
  // 查看是否授权
     let that = this;
+
     wx.getSetting({
       success(res) {
         if (res.authSetting['scope.userInfo']) {
-          wx.setStorageSync("userEnter", true)
-          that.setData({
-            cannotEntery: false,
-            userLicenseAgreementDisplay: true,
-          })
+          console.log("用户正在登录")
           wx.login({
             success: res => {
               if (res.code) {
@@ -33,6 +30,12 @@ Page({
               }
             }
           })
+          wx.setStorageSync("userEnter", true)
+          that.setData({
+            cannotEntery: false,
+            userLicenseAgreementDisplay: true,
+          })
+          console.log("用户允许登录")
         } else {
           console.log("用户拒绝登录")
         }
@@ -57,6 +60,10 @@ Page({
     const token = wx.getStorageSync('token')
     const agreementUrl = app.BASE_URL +'/user/agreement'
 
+    // wx.reLaunch({
+    //   url: '../index/index'
+    // })
+
     app.request(agreementUrl, 'GET', '', res => {
       console.log('agreementUrl')
       console.log(res)
@@ -64,6 +71,7 @@ Page({
         url: '../index/index'
       })
     }, res => { }, { 'Authorization': token }, '')
+
   },
   radioChange: function (e) {
     this.setData({
